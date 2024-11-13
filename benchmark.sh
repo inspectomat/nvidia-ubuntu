@@ -1,5 +1,22 @@
 #!/bin/bash
 
+# collect_performance_data: Gathers comprehensive system performance data
+#
+# This function collects various performance metrics including CPU, memory,
+# GPU, disk I/O, and system load. It also performs a CUDA test and an Ollama
+# test if available. The collected data is written to a specified output file.
+#
+# Parameters:
+#   $1 - output_file: The file path where the performance data will be saved
+#
+# Returns:
+#   0 on successful completion, non-zero on error
+#
+# Side effects:
+#   - Creates or overwrites the file specified by $1
+#   - Writes performance data to the specified file
+#   - Prints a message to stdout indicating the file being written to
+
 # Definicja ścieżek do plików z wynikami
 BEFORE_FILE="performance_before.log"
 AFTER_FILE="performance_after.log"

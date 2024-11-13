@@ -1,0 +1,22 @@
+FROM ubuntu:24.10
+
+# Install essential packages
+RUN apt-get update && apt-get install -y \
+    sudo \
+    lsb-release \
+    pciutils \
+    curl \
+    software-properties-common \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy test files
+COPY driver.sh /app/driver.sh
+COPY tests/test_driver.sh /app/test_driver.sh
+
+# Make scripts executable
+RUN chmod +x /app/driver.sh /app/test_driver.sh
+
+WORKDIR /app
+
+# Set entrypoint to test script
+ENTRYPOINT ["/app/test_driver.sh"]

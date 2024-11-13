@@ -1,12 +1,23 @@
 #!/bin/bash
 
-# Sprawdzenie czy skrypt jest uruchomiony z uprawnieniami root
-if [ "$EUID" -ne 0 ]; then
-    echo "Proszę uruchomić jako root (sudo)"
-    exit 1
-fi
+# Function: install_nvidia_drivers
+## Description: Installs NVIDIA drivers for RTX 4060, CUDA Toolkit, and additional tools.
+#              This function performs the following tasks:
+#              - Removes old NVIDIA drivers and nouveau
+#              - Blacklists nouveau driver
+#              - Updates initramfs
+#              - Adds GPU PPA repository
+#              - Installs latest NVIDIA drivers (version 545)
+#              - Installs CUDA Toolkit
+#              - Installs additional NVIDIA tools
+#              - Verifies the installation
+#
+## Returns:
+#   0 - If the installation is successful
+#   1 - If the installation fails
+#
+## Usage: install_nvidia_drivers
 
-# Funkcja instalacji sterowników NVIDIA
 install_nvidia_drivers() {
     echo "Rozpoczynam instalację sterowników NVIDIA dla RTX 4060..."
 
@@ -44,6 +55,7 @@ EOF
     if nvidia-smi &>/dev/null; then
         echo "Sterowniki NVIDIA zainstalowane pomyślnie!"
         nvidia-smi
+        return 0
     else
         echo "BŁĄD: Instalacja sterowników nie powiodła się!"
         return 1
@@ -150,32 +162,6 @@ for disk in $(lsblk -d -o name | grep -v NAME); do
         echo "deadline" > /sys/block/$disk/queue/scheduler
     fi
 done
-
-# Tworzenie skryptu monitorującego
-echo "Tworzenie skryptu monitorującego..."
-cat > /usr/local/bin/monitor-llm << EOF
-#!/bin/bash
-tmux new-session -d -s monitor
-tmux split-window -h
-tmux send-keys -t 0 'htop' C-m
-tmux send-keys -t 1 'nvtop' C-m
-tmux attach-session -t monitor
-EOF
-
-chmod +x /usr/local/bin/monitor-llm
-
-# Tworzenie skryptu do szybkiego resetu ustawień NVIDIA
-cat > /usr/local/bin/reset-nvidia << EOF
-#!/bin/bash
-nvidia-smi -pm 1
-nvidia-smi --auto-boost-default=0
-nvidia-smi -ac 3615,1530
-nvidia-smi --power-limit=115
-nvidia-settings -a "[gpu:0]/GpuPowerMizerMode=1"
-echo "Ustawienia NVIDIA zresetowane do optymalnych wartości"
-EOF
-
-chmod +x /usr/local/bin/reset-nvidia
 
 echo "Optymalizacja i instalacja sterowników zakończona. Proszę zrestartować system."
 echo "Po restarcie możesz:"

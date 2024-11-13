@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  driver-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix  # For potential GUI testing
+    environment:
+      - DISPLAY=${DISPLAY}  # For potential GUI testing
+    privileged: true  # Required for simulating hardware access
+    cap_add:
+      - SYS_ADMIN  # Required for system administration tasks
+    devices:
+      - /dev/nvidia0:/dev/nvidia0  # Mock NVIDIA device
+      - /dev/nvidiactl:/dev/nvidiactl  # Mock NVIDIA control
+    command: ["bash", "-c", "/app/test_driver.sh"]
