@@ -66,13 +66,16 @@ fi
 # Install required packages
 echo -e "${YELLOW}Instalacja wymaganych pakietów...${NC}"
 apt-get update
-apt-get install -y sysstat procps bc curl
+apt-get install -y sysstat procps bc curl tmux htop nvtop nvidia-settings
 
-# Install NVIDIA drivers using driver.sh
-./driver.sh
 
 # Download scripts
 echo -e "${YELLOW}Pobieranie skryptów...${NC}"
+
+# Install NVIDIA drivers using driver.sh
+curl -sSL https://raw.githubusercontent.com/inspectomat/nvidia-ubuntu/main/driver.sh -o /usr/local/bin/nvidia-driver-install
+chmod +x /usr/local/bin/nvidia-driver-install
+
 # Benchmark
 curl -sSL https://raw.githubusercontent.com/inspectomat/nvidia-ubuntu/main/benchmark.sh -o /usr/local/bin/nvidia-benchmark
 chmod +x /usr/local/bin/nvidia-benchmark
@@ -81,8 +84,17 @@ chmod +x /usr/local/bin/nvidia-benchmark
 curl -sSL https://raw.githubusercontent.com/inspectomat/nvidia-ubuntu/main/optimize.sh -o /usr/local/bin/nvidia-optimize
 chmod +x /usr/local/bin/nvidia-optimize
 
+# Install monitor-llm
+curl -sSL https://raw.githubusercontent.com/inspectomat/nvidia-ubuntu/main/monitor-llm.sh -o /usr/local/bin/monitor-llm
+chmod +x /usr/local/bin/monitor-llm
+
+# Install reset-nvidia
+curl -sSL https://raw.githubusercontent.com/inspectomat/nvidia-ubuntu/main/reset-nvidia.sh -o /usr/local/bin/reset-nvidia
+chmod +x /usr/local/bin/reset-nvidia
+
 # Check installation
-if [ -f /usr/local/bin/nvidia-benchmark ] && [ -f /usr/local/bin/nvidia-optimize ]; then
+if [ -f /usr/local/bin/nvidia-benchmark ] && [ -f /usr/local/bin/nvidia-optimize ] && \
+   [ -f /usr/local/bin/monitor-llm ] && [ -f /usr/local/bin/reset-nvidia ]; then
     echo -e "${GREEN}Instalacja zakończona pomyślnie!${NC}"
     echo -e "${YELLOW}Dostępne narzędzia:${NC}"
     echo "1. nvidia-benchmark:"
@@ -92,6 +104,12 @@ if [ -f /usr/local/bin/nvidia-benchmark ] && [ -f /usr/local/bin/nvidia-optimize
     echo ""
     echo "2. nvidia-optimize:"
     echo "   - sudo nvidia-optimize     - optymalizacja systemu"
+    echo ""
+    echo "3. monitor-llm:"
+    echo "   - monitor-llm             - monitorowanie zasobów systemu"
+    echo ""
+    echo "4. reset-nvidia:"
+    echo "   - sudo reset-nvidia       - reset ustawień NVIDIA do optymalnych wartości"
     echo ""
     echo -e "${YELLOW}Czy chcesz uruchomić optymalizację systemu teraz? (t/N)${NC}"
     read -p "" -n 1 -r
@@ -104,31 +122,6 @@ else
     exit 1
 fi
 
-echo "Tworzenie skryptu monitorującego..."
-cat > /usr/local/bin/monitor-llm << EOF
-#!/bin/bash
-tmux new-session -d -s monitor
-tmux split-window -h
-tmux send-keys -t 0 'htop' C-m
-tmux send-keys -t 1 'nvtop' C-m
-tmux attach-session -t monitor
-EOF
-
-chmod +x /usr/local/bin/monitor-llm
-
-echo "Tworzenie skryptu do szybkiego resetu ustawień NVIDIA"
-cat > /usr/local/bin/reset-nvidia << EOF
-#!/bin/bash
-nvidia-smi -pm 1
-nvidia-smi --auto-boost-default=0
-nvidia-smi -ac 3615,1530
-nvidia-smi --power-limit=115
-nvidia-settings -a "[gpu:0]/GpuPowerMizerMode=1"
-echo "Ustawienia NVIDIA zresetowane do optymalnych wartości"
-EOF
-
-chmod +x /usr/local/bin/reset-nvidia
-
 # Check optional components
 if ! command -v gnuplot &> /dev/null; then
     echo -e "${YELLOW}Sugestia: Zainstaluj gnuplot dla generowania wykresów:${NC}"
@@ -140,4 +133,7 @@ if ! command -v ollama &> /dev/null; then
     echo "curl https://ollama.ai/install.sh | sh"
 fi
 
+nvidia-driver-install
+
 echo -e "${GREEN}Gotowe!${NC}"
+

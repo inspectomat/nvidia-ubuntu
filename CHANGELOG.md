@@ -5,7 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0] - 2024-03-20
+## [2.1.0] - 2024-03-20
+
+### Added
+- Comprehensive test documentation:
+  - Unit tests for all main tools:
+    - nvidia-driver-install tests
+    - nvidia-benchmark tests
+    - nvidia-optimize tests
+    - monitor-llm tests
+    - reset-nvidia tests
+  - Docker-based test environment setup
+  - Integration test suite
+- Test automation scripts:
+  - run_tests.sh for executing all tests
+  - Individual test files for each component
+
+### Changed
+- Updated README.md with detailed testing information
+- Enhanced installation script documentation
+- Added test requirements and setup instructions
+
+## [2.0.0] - 2024-03-20
 
 ### Changed
 - Completely restructured README.md for better readability

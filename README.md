@@ -1,25 +1,8 @@
-# NVIDIA Ubuntu Performance Suite
+# NVIDIA Ubuntu Performance Suite v2.0.0
 
 A beginner-friendly toolkit for optimizing and benchmarking Ubuntu systems with NVIDIA GPUs. This suite is specifically optimized for RTX 4060 and includes tools for system optimization, performance testing, and monitoring.
 
-
 ## 🚀 Quick Start
-
-```bash
-#Automatic Installation
-curl -sSL https://raw.githubusercontent.com/inspectomat/nvidia-ubuntu/main/install.sh | sudo bash
-# Test performance before optimization
-nvidia-benchmark before
-# To run optimization
-sudo nvidia-optimize
-# Test performance after optimization
-nvidia-benchmark after
-# Compare results
-nvidia-benchmark compare
-```
-
-
-## Start
 
 ### Option 1: Automatic Installation (Recommended for Beginners)
 ```bash
@@ -56,7 +39,7 @@ sudo apt-get install sysstat procps nvidia-utils bc
 - `ollama`: Required for LLM performance testing
 - `gnuplot`: Required for generating performance graphs
 
-## 🛠️ Main Tools
+## 🛠️ Usage
 
 This suite provides several easy-to-use tools:
 
@@ -64,6 +47,10 @@ This suite provides several easy-to-use tools:
    ```bash
    # Test performance before optimization
    nvidia-benchmark before
+   
+   nvidia-driver-install
+
+   nvidia-optimize
    
    # Test performance after optimization
    nvidia-benchmark after
@@ -126,6 +113,10 @@ sudo nvidia-optimize
 - SWAP size is set to 110GB (optimized for Llama 3.2 Vision)
 - All settings are tuned specifically for RTX 4060
 
+## 🔄 Version History
+
+See [CHANGELOG.md](CHANGELOG.md) for detailed version history and updates.
+
 ## 📝 License
 
 Apache 2 License
@@ -133,3 +124,14 @@ Apache 2 License
 ## 🤝 Contributing
 
 Issues and pull requests are welcome! Check our [CHANGELOG.md](CHANGELOG.md) for recent updates.
+
+## 🧪 Testing
+
+The suite includes comprehensive tests:
+- Unit tests for all tools
+- Integration tests
+- Docker-based test environment
+
+To run tests:
+```bash
+./run_tests.sh
