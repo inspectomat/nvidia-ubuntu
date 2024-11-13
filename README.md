@@ -12,6 +12,10 @@ curl -sSL https://raw.githubusercontent.com/inspectomat/nvidia-ubuntu/main/insta
 nvidia-benchmark before
 # To run optimization
 sudo nvidia-optimize
+# Test performance after optimization
+nvidia-benchmark after
+# Compare results
+nvidia-benchmark compare
 ```
 
 
