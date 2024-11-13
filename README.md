@@ -1,114 +1,192 @@
+# Nvidia Ubuntu Performance Benchmark
 
+Script for benchmarking system performance on Ubuntu with NVIDIA GPU.
 
-1. Funkcję `install_nvidia_drivers`, która:
-   - Usuwa stare sterowniki
-   - Blokuje sterownik nouveau
-   - Instaluje najnowsze sterowniki NVIDIA (545)
-   - Instaluje CUDA Toolkit
-   - Weryfikuje instalację
+## Quick Install
 
-2. Dodatkowe optymalizacje dla RTX 4060:
-   - Ustawienie limitu mocy na 115W
-   - Konfiguracja trybu maksymalnej wydajności
-   - Optymalizacja cache'u CUDA
-
-3. Nowy skrypt `reset-nvidia` do szybkiego przywracania optymalnych ustawień karty
-
-Aby użyć skryptu:
+One-line installation:
 ```bash
-chmod +x optimize.sh
-sudo ./optimize.sh
+curl -sSL https://raw.githubusercontent.com/inspectomat/nvidia-ubuntu/main/install.sh | sudo bash
+```
+or using wget:
+```bash
+wget -qO- https://raw.githubusercontent.com/inspectomat/nvidia-ubuntu/main/install.sh | sudo bash
 ```
 
-WAŻNE UWAGI:
-1. Zrób backup systemu przed uruchomieniem
-2. Po instalacji WYMAGANY jest restart
-3. Jeśli masz problemy z ekranem po instalacji, możesz użyć Ctrl+Alt+F1 aby przejść do konsoli
-4. W przypadku problemów sprawdź logi: `journalctl -xe`
+## Manual Installation
 
-
----
-
-
-1. Funkcję `install_nvidia_drivers`, która:
-   - Usuwa stare sterowniki
-   - Blokuje sterownik nouveau
-   - Instaluje najnowsze sterowniki NVIDIA (545)
-   - Instaluje CUDA Toolkit
-   - Weryfikuje instalację
-
-2. Dodatkowe optymalizacje dla RTX 4060:
-   - Ustawienie limitu mocy na 115W
-   - Konfiguracja trybu maksymalnej wydajności
-   - Optymalizacja cache'u CUDA
-
-3. Nowy skrypt `reset-nvidia` do szybkiego przywracania optymalnych ustawień karty
-
-Aby użyć skryptu:
+Clone the repository:
 ```bash
-chmod +x optimize.sh
-sudo ./optimize.sh
-```
-
-WAŻNE UWAGI:
-1. Zrób backup systemu przed uruchomieniem
-2. Po instalacji WYMAGANY jest restart
-3. Jeśli masz problemy z ekranem po instalacji, możesz użyć Ctrl+Alt+F1 aby przejść do konsoli
-4. W przypadku problemów sprawdź logi: `journalctl -xe`
-
-
-
-
----
-
-
-
-Stworzyłem skrypt do kompleksowego testowania wydajności. Oto jak go używać:
-
-1. Nadaj uprawnienia wykonywania:
-```bash
+git clone https://github.com/inspectomat/nvidia-ubuntu.git
+cd nvidia-ubuntu
 chmod +x benchmark.sh
 ```
 
-2. Uruchom testy przed optymalizacją:
+## Requirements
+
+The installer will automatically install these dependencies, but if you're installing manually, you need:
 ```bash
-sudo ./benchmark.sh before
+sudo apt-get update
+sudo apt-get install sysstat procps nvidia-utils bc
 ```
 
-3. Wykonaj optymalizację systemu (używając wcześniejszego skryptu)
+Optional features:
+- `ollama` - for LLM performance testing
+- `gnuplot` - for generating performance graphs
 
-4. Uruchom testy po optymalizacji:
+## Usage
+
+The script has three main modes:
+
+1. Collect performance data before optimization:
 ```bash
-sudo ./benchmark.sh after
+nvidia-benchmark before
 ```
 
-5. Porównaj wyniki:
+2. Collect performance data after optimization:
 ```bash
-sudo ./benchmark.sh compare
+nvidia-benchmark after
 ```
 
-Skrypt:
-1. Zbiera dane o:
-   - Wydajności CPU
-   - Wykorzystaniu pamięci i SWAP
-   - Parametrach GPU (temperatura, taktowanie, wykorzystanie)
-   - Wydajności I/O dysku
-   - Ogólnym obciążeniu systemu
-   - Wydajności CUDA
-   - Czasie wykonania prostego testu Ollama
-
-2. Tworzy szczegółowe porównanie w pliku tekstowym
-
-3. Generuje wykres porównawczy (jeśli zainstalowany jest gnuplot)
-
-Wymagania:
+3. Compare the results:
 ```bash
-sudo apt install sysstat procps nvidia-utils bc gnuplot
+nvidia-benchmark compare
 ```
 
-Pliki wyjściowe:
-- `performance_before.log` - dane przed optymalizacją
-- `performance_after.log` - dane po optymalizacji
-- `performance_comparison.txt` - analiza porównawcza
-- `performance_comparison.png` - wykres (opcjonalnie)
+## Features
+
+Collects and analyzes:
+- CPU frequency and load
+- Memory usage and SWAP status
+- NVIDIA GPU metrics
+- Disk I/O performance
+- System load
+- CUDA performance
+- Optional Ollama LLM test
+
+For more details, visit the [GitHub repository](https://github.com/inspectomat/nvidia-ubuntu).
+
+## Features
+
+The script collects and analyzes:
+- CPU frequency and load
+- Memory usage and SWAP status
+- NVIDIA GPU metrics (temperature, power draw, clock speeds, utilization)
+- Disk I/O performance
+- System load
+- CUDA performance via nvlink test
+- Optional Ollama LLM performance test
+
+## Output Files
+
+The script generates the following files:
+- `performance_before.log` - Performance metrics before optimization
+- `performance_after.log` - Performance metrics after optimization
+- `performance_comparison.txt` - Detailed comparison of before/after metrics
+- `performance_comparison.png` - Visual graph comparison (if gnuplot is installed)
+
+## Example Output
+
+The comparison file includes:
+- CPU load comparison
+- Memory usage analysis
+- GPU utilization changes
+- Percentage changes in key metrics
+- Visual performance graphs (if gnuplot is installed)
+
+
+# Nvidia Ubuntu Performance Benchmark & Optimization
+
+Scripts for optimizing and benchmarking system performance on Ubuntu with NVIDIA GPU (optimized for RTX 4060).
+
+## Quick Install
+
+One-line installation and optimization:
+```bash
+# Install benchmark tools
+curl -sSL https://raw.githubusercontent.com/inspectomat/nvidia-ubuntu/main/install.sh | sudo bash
+
+# Run system optimization (for RTX 4060)
+curl -sSL https://raw.githubusercontent.com/inspectomat/nvidia-ubuntu/main/optimize.sh | sudo bash
+```
+
+## What it does
+
+### Optimization Script
+- Installs latest NVIDIA drivers (545)
+- Configures SWAP (110GB for LLM)
+- Optimizes kernel parameters
+- Sets up NVIDIA GPU for maximum performance
+- Creates monitoring and management tools
+- Optimizes system for LLM workloads
+
+### Benchmark Script
+- Measures system performance
+- Monitors CPU, Memory, GPU usage
+- Tests CUDA performance
+- Generates comparison reports
+
+## Requirements
+
+- Ubuntu 24.10
+- NVIDIA GPU (optimized for RTX 4060)
+- Root privileges
+
+## Usage
+
+### Optimization
+```bash
+# Run full system optimization
+sudo nvidia-optimize
+
+# Reset NVIDIA settings to optimal values
+reset-nvidia
+
+# Monitor system resources
+monitor-llm
+```
+
+### Benchmarking
+```bash
+# Before optimization
+nvidia-benchmark before
+
+# After optimization
+nvidia-benchmark after
+
+# Compare results
+nvidia-benchmark compare
+```
+
+## Created Tools
+
+The optimization script creates several useful tools:
+
+1. `run-ollama`: Optimized Ollama launcher
+2. `monitor-llm`: System monitoring tool (htop + nvtop)
+3. `reset-nvidia`: Quick NVIDIA settings reset
+4. `nvidia-benchmark`: Performance testing tool
+
+## Notes
+
+- Backup your system before running optimization
+- The script is optimized for RTX 4060
+- SWAP size is set to 110GB for Llama 3.2 Vision
+- System restart required after optimization
+
+## Support
+
+For issues and contributions, visit the [GitHub repository](https://github.com/inspectomat/nvidia-ubuntu).
+
+
+
+## License
+
+Apache 2 License
+
+## Contributing
+
+Feel free to open issues or submit pull requests with improvements.
+
+
 
