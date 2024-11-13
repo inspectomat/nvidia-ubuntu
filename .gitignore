@@ -1,3 +1,9 @@
+.idea
+.config
+motion
+tagged
+timelapses
+recognition
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
