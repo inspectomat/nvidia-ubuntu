@@ -5,7 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.1.0] - 2024-03-20
+## [2.2.0] - 2024-03-21
+
+### Changed
+- Reorganized test structure:
+  - Moved all test files to tests/ directory
+  - Updated Dockerfile.test to handle new test structure
+  - Updated test paths in docker-compose.test.yml
+- Improved script organization:
+  - Extracted monitor-llm to standalone script
+  - Extracted reset-nvidia to standalone script
+  - Updated install.sh to handle standalone scripts
+
+### Added
+- New test files:
+  - tests/test_monitor_llm.sh for monitoring functionality
+  - tests/test_reset_nvidia.sh for GPU settings
+  - tests/test_ollama.sh for LLM functionality
+- Enhanced documentation:
+  - Updated README.md with new test structure
+  - Added test directory layout documentation
+  - Improved test execution instructions
+
+### Fixed
+- Test environment setup in Dockerfile.test
+- Dependencies installation in test environment
+- Test file permissions handling
+
+## [2.1.0] - 2024-11-13
 
 ### Added
 - Comprehensive test documentation:
@@ -26,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced installation script documentation
 - Added test requirements and setup instructions
 
-## [2.0.0] - 2024-03-20
+## [2.0.0] - 2024-11-13
 
 ### Changed
 - Completely restructured README.md for better readability
@@ -45,7 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Comprehensive system requirements
   - Step-by-step optimization guide
 
-## [1.0.0] - 2024-03-20
+## [1.0.0] - 2024-11-13
 
 ### Added
 - Initial release
